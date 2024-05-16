@@ -1,4 +1,4 @@
-# Backend - Projet vendremesobbjets.fr
+# Backend - Projet mon-vieux-grimoire.com
 
 Ce dossier contient le code et les ressources nécessaires uniquement pour le backend du projet.
 
@@ -72,4 +72,4 @@ Les contributions à ce projet sont les bienvenues. N'hésitez pas à créer une
 
 ---
 
-Ce README sera mis à jour au fur et à mesure que le projet avance. Restez à l'écoute pour plus de mises à jour !
+Ce README sera mis à jour au fur et à mesure que le projet avance.
