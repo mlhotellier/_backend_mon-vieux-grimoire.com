@@ -4,21 +4,17 @@ const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/png': 'png',
-  'image/webp': 'webp'
+  // 'image/webp': 'webp',
 };
 
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, 'images');
-  },
-  filename: (req, file, callback) => {
-    const newFile = file.originalname.split(' ').join('_');
-    const extension = MIME_TYPES[file.mimetype];
-    const newName = newFile.split('.'+extension);
-    const name = newName[0];
-    console.log(extension)
-    callback(null, Date.now() + '_' + name + '.' + extension);
-  }
-});
+const storage = multer.memoryStorage();
 
-module.exports = multer({ storage: storage }).single('image');
+const fileFilter = (req, file, cb) => {
+  if (MIME_TYPES[file.mimetype]) {
+    cb(null, true);
+  } else {
+    cb(new Error('Le type du fichier est incorrect'), false);
+  }
+};
+
+module.exports = multer({ storage: storage, fileFilter: fileFilter }).single('image');
