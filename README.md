@@ -51,12 +51,12 @@ Pour commencer, vous devrez récupérer les ressources pour le back-end
     ```
 
 ou si vous souhaitez relancer automatiquement le serveur après des modifications, utilisez la commande :
-
+    
     ```bash
     nodemon
     ```
 
-    Cela lancera le serveur de développement pour l'application backend.
+Cela lancera le serveur de développement pour l'application backend.
 
 4. **Remplacer les valeurs `process.env.VALUE` :** Créez un fichier `.env` à la racine de votre projet et ajouter les valeurs :
 - PORT=PORT // Par défault configuré sur 4000

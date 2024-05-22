@@ -1,4 +1,4 @@
-const Book = require('../models/Book');
+const { Book, addRating } = require('../models/Book');
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +17,7 @@ function cleanFileName(str) {
         str = str.substring(0, 99);
     }
     return str;
-}
+};
 
 exports.getAllBook = (req, res, next) => {
     Book.find()
@@ -121,6 +121,25 @@ exports.deleteBook = (req,res,next) => {
     .catch(error => res.status(404).json({ error }));
 };
 
+exports.createRatingBook = (req,res,next) => {
+    console.log("POST RATING");
+    Book.findOne({ _id: req.params.id })
+        .then((book) => {
+            if (!book) {
+                return res.status(404).json({ message: "Livre non trouvé." });
+            }
+            return addRating(req.params.id, book.userId, req.body.rating, req.auth.userId)
+            .then(updatedBook => {
+                console.log("Note ajoutée avec succès.", updatedBook);
+                // Refresh page
+                res.redirect(`/api/books/${req.params.id}`);
+            })
+                .catch(error => res.status(400).json({ error: error.message }));
+        })
+        .catch(error => res.status(404).json({ error: error.message }));
+};
+
+
 // ERROR
 exports.getBestBook = (req, res, next) => {
     console.log("GET BEST");
@@ -128,8 +147,3 @@ exports.getBestBook = (req, res, next) => {
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({ error }));
 };
-
-// NOT IMPLEMENT YET
-exports.createRatingBook = (req,res,next) => {
-    console.log("POST RATING")
-}
