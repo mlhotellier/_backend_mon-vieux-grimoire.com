@@ -44,16 +44,14 @@ Pour commencer, vous devrez récupérer les ressources pour le back-end
     npm install
     ```
 
-3. **Démarrage du Serveur de Développement :** Après avoir installé les dépendances, lancez le serveur de développement en utilisant la commande :
+3. **Démarrage du Serveur de Développement :** Après avoir installé les dépendances, lancez le serveur de développement en utilisant l'une des commandes suivantes :
 
     ```bash
     npm start
     ```
-
-ou si vous souhaitez relancer automatiquement le serveur après des modifications, utilisez la commande :
     
     ```bash
-    nodemon
+    nodemon /*** Permet de relancer le serveur à après chaque modification ***/
     ```
 
 Cela lancera le serveur de développement pour l'application backend.
