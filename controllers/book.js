@@ -1,28 +1,22 @@
-const { Book, addRating } = require('../models/Book');
+const Book = require('../models/Book');
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
-
-function cleanFileName(str) {
-    // Delete emojis
-    str = str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '');
-    // Remplace specials characters
-    str = str.normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // Acentuate characters
-        .replace(/[^\w\s.-]/g, "") // No letter, number, space, dash or point characters
-        .replace(/\s+/g, "") // '#'
-        .replace(/\s+/g, "_"); // Convert space to unnderscore
-    // Limit name to 99 characters
-    if (str.length > 99) {
-        str = str.substring(0, 99);
-    }
-    return str;
-};
+const { cleanFileName, addRating } = require('../functions/utils');
 
 exports.getAllBook = (req, res, next) => {
     Book.find()
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({error}))
+};
+
+exports.getBestBooks = async (req, res, next) => {
+    try {
+        const bestBooks = await Book.find().sort({ averageRating: -1 }).limit(3);
+        res.status(200).json(bestBooks);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 exports.getOneBook = (req,res,next) => {
@@ -32,7 +26,6 @@ exports.getOneBook = (req,res,next) => {
 };
 
 exports.createBook = async (req,res,next) => {
-    console.log("POST ONE") 
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._id;
     delete bookObject.userId;
@@ -57,7 +50,6 @@ exports.createBook = async (req,res,next) => {
 };
 
 exports.modifyBook = async (req,res,next) => {
-    console.log("MODIFY ONE")
     const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -104,7 +96,6 @@ exports.modifyBook = async (req,res,next) => {
 };
 
 exports.deleteBook = (req,res,next) => {
-    console.log("DELETE ONE")
     Book.findOne({ _id: req.params.id })
     .then(book => {
         if(book.userId != req.auth.userId){
@@ -121,29 +112,18 @@ exports.deleteBook = (req,res,next) => {
     .catch(error => res.status(404).json({ error }));
 };
 
-exports.createRatingBook = (req,res,next) => {
-    console.log("POST RATING");
-    Book.findOne({ _id: req.params.id })
-        .then((book) => {
-            if (!book) {
-                return res.status(404).json({ message: "Livre non trouvé." });
-            }
-            return addRating(req.params.id, book.userId, req.body.rating, req.auth.userId)
-            .then(updatedBook => {
-                console.log("Note ajoutée avec succès.", updatedBook);
-                // Refresh page
-                res.redirect(`/api/books/${req.params.id}`);
-            })
-                .catch(error => res.status(400).json({ error: error.message }));
-        })
-        .catch(error => res.status(404).json({ error: error.message }));
-};
+exports.createRatingBook = async (req,res,next) => {
+    try {
+        const book = await Book.findOne({ _id: req.params.id }); // Utiliser await pour la recherche du livre
 
+        if (!book) {
+            return res.status(404).json({ message: "Livre non trouvé." });
+        }
 
-// ERROR
-exports.getBestBook = (req, res, next) => {
-    console.log("GET BEST");
-    Book.find().limit(3).sort({ averageRating: -1 })
-        .then(books => res.status(200).json(books))
-        .catch(error => res.status(400).json({ error }));
+        await addRating(req.params.id, book.userId, req.body.rating, req.auth.userId); // Utiliser await pour addRating
+
+        res.redirect(`/api/books/${req.params.id}`);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 };
