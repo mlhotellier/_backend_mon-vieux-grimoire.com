@@ -17,7 +17,7 @@ const addRating = async (bookId, userId, rating, userConnected) => {
             throw new Error("Vous avez déjà noté ce livre.");
         }
 
-        book.ratings.push({  userId: userConnected, grade: rating });
+        book.ratings.push({ userId: userConnected, grade: rating });
         await book.save();
         return book;
     } catch (error) {

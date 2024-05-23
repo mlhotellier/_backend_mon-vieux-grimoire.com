@@ -10,15 +10,6 @@ exports.getAllBook = (req, res, next) => {
         .catch(error => res.status(400).json({error}))
 };
 
-exports.getBestBooks = async (req, res, next) => {
-    try {
-        const bestBooks = await Book.find().sort({ averageRating: -1 }).limit(3);
-        res.status(200).json(bestBooks);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
 exports.getOneBook = (req,res,next) => {
     Book.findOne({ _id: req.params.id })
         .then(book => res.status(200).json(book))
@@ -114,16 +105,24 @@ exports.deleteBook = (req,res,next) => {
 
 exports.createRatingBook = async (req,res,next) => {
     try {
-        const book = await Book.findOne({ _id: req.params.id }); // Utiliser await pour la recherche du livre
-
+        const book = await Book.findOne({ _id: req.params.id });
         if (!book) {
             return res.status(404).json({ message: "Livre non trouvé." });
         }
-
-        await addRating(req.params.id, book.userId, req.body.rating, req.auth.userId); // Utiliser await pour addRating
-
-        res.redirect(`/api/books/${req.params.id}`);
+        await addRating(req.params.id, book.userId, req.body.rating, req.auth.userId);
+        const updatedBook = await Book.findOne({ _id: req.params.id });
+        res.status(200).json( updatedBook );
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+};
+
+exports.getBestBooks = async (req, res, next) => {
+    console.log("********")
+    try {
+        const bestBooks = await Book.find().sort({ averageRating: -1 }).limit(3);
+        res.status(200).json(bestBooks);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
