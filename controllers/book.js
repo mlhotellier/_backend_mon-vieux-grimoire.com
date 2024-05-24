@@ -114,7 +114,7 @@ exports.deleteBook = (req,res,next) => {
 };
 
 exports.createRatingBook = async (req,res,next) => {
-    const userId = req.body.userId;
+    const userId = req.auth.userId;
     const rating = req.body.rating;
     try {
         const book = await Book.findOne({ _id: req.params.id });
@@ -136,6 +136,6 @@ exports.createRatingBook = async (req,res,next) => {
         await updatedBook.save();
         res.status(200).json(updatedBook);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
