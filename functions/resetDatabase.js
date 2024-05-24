@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs').promises;
+const path = require('path');
 
 // Function to reset the database
 const resetDatabase = async () => {
@@ -12,13 +13,19 @@ const resetDatabase = async () => {
         await mongoose.connection.db.collection('books').drop();
         console.log("Collection 'books' deleted.");
 
-        console.log("Collections 'users' and 'books' have been removed successfully.");
+        // Get the list of files in the '/images/' directory
+        const files = await fs.readdir(path.join(__dirname, '../images'));
 
-        // Delete the content of the '/images/' directory
-        await fs.rm(path.join(__dirname, '../images'), { recursive: true });
-        console.log("The content of the '/images/' directory has been deleted successfully.");
+        // Loop through each file and delete it
+        for (const file of files) {
+            await fs.unlink(path.join(__dirname, '../images', file));
+            console.log(`Deleted file: ${file}`);
+        }
+
+        console.log("Database is reset and ready, uncomment lines in db.js for use app.");
+
     } catch (error) {
-        console.error("Error deleting collections or content of the '/images/' directory:", error);
+        console.error("Error deleting collections or files in the '/images/' directory:", error);
     }
 };
 
