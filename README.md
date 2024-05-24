@@ -1,3 +1,5 @@
+<img src="https://github.com/mlhotellier/_backend_mon-vieux-grimoire.com/raw/main/head_readme.png" alt="MonVieuxGrimoire" style="width: 100%;">
+
 # Projet mon-vieux-grimoire.com - API Backend
 
 Ce dossier contient le code et les ressources nécessaires du projet MonVieuxGrimoire. Projet 6  parcours Développeur Web d'@Openclassrooms.
@@ -30,7 +32,6 @@ L'objectif est de créer une API robuste et efficace qui permettra au front-end 
 
 ## Structure du projet
 
-    ```bash
     ├── controllers/ # Contrôleurs pour gérer la logique métier
     ├── functions/ # Fonctions utilitaires
     ├── images/ # Dossier public pour stocker les images des livres
@@ -46,7 +47,6 @@ L'objectif est de créer une API robuste et efficace qui permettra au front-end 
     ├── package.json 
     ├── README.md 
     └── server.js # Point d'entrée de l'application
-    ```
 
 ## Installation
 
