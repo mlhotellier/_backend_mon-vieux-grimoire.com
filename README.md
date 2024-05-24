@@ -29,6 +29,7 @@ L'objectif est de créer une API robuste et efficace qui permettra au front-end 
 - Supprimer un livre de la collection
 - Noter les livres avec une évaluation de 0 à 5 étoiles
 - Authentification des utilisateurs avec inscription et connexion
+- Réinitialiser le projet en supprimant les collections 'users' et 'books' de la DB, ainsi que contenu du dossier /images/
 
 ## Structure du projet
 
