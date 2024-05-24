@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const fs = require('fs').promises;
 const path = require('path');
 
-// Function to reset the database
+// Function to reset the database --dev function
 const resetDatabase = async () => {
     try {
         // Delete 'users' collection
