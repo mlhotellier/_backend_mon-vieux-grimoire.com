@@ -29,21 +29,24 @@ L'objectif est de créer une API robuste et efficace qui permettra au front-end 
 - Authentification des utilisateurs avec inscription et connexion
 
 ## Structure du projet
-├── controllers/ # Contrôleurs pour gérer la logique métier
-├── functions/ # Fonctions utilitaires
-├── images/ # Dossier public pour stocker les images des livres
-├── middleware/ # Middleware pour la gestion des requêtes HTTP
-├── models/ # Modèles de données MongoDB
-├── routes/ # Définition des routes de l'API
-├── .env.example # Exemple de configuration du fichier .env
-├── app.js # Initialisation de l'application
-├── config.js # Configuration de l'application
-├── corsConfig.js # Configuration du CORS l'application
-├── db.js # Configuration de la connection à MongoDB
-├── package-lock.json 
-├── package.json 
-├── README.md 
-└── server.js # Point d'entrée de l'application
+
+    ```bash
+    ├── controllers/ # Contrôleurs pour gérer la logique métier
+    ├── functions/ # Fonctions utilitaires
+    ├── images/ # Dossier public pour stocker les images des livres
+    ├── middleware/ # Middleware pour la gestion des requêtes HTTP
+    ├── models/ # Modèles de données MongoDB
+    ├── routes/ # Définition des routes de l'API
+    ├── .env.example # Exemple de configuration du fichier .env
+    ├── app.js # Initialisation de l'application
+    ├── config.js # Configuration de l'application
+    ├── corsConfig.js # Configuration du CORS l'application
+    ├── db.js # Configuration de la connection à MongoDB
+    ├── package-lock.json 
+    ├── package.json 
+    ├── README.md 
+    └── server.js # Point d'entrée de l'application
+    ```
 
 ## Installation
 
