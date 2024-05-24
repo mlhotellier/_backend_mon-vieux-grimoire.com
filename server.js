@@ -2,9 +2,9 @@ require('dotenv').config();
 const http = require('http');
 const app = require('./app');
 
+// Function to normalize a port into a number, string, or false
 const normalizePort = val => {
   const port = parseInt(val, 10);
-
   if (isNaN(port)) {
     return val;
   }
@@ -13,9 +13,12 @@ const normalizePort = val => {
   }
   return false;
 };
+
+// Retrieve the port from environment variables or default to 4000
 const port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
 
+// Function to handle specific listen errors with messages
 const errorHandler = error => {
   if (error.syscall !== 'listen') {
     throw error;
@@ -36,6 +39,7 @@ const errorHandler = error => {
   }
 };
 
+// Create HTTP server
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
@@ -45,4 +49,5 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
+// Start the server and listen on the specified port
 server.listen(port);

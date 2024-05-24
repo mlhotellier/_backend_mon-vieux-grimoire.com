@@ -1,10 +1,10 @@
 const multer = require('multer');
 
+// Define allowed MIME types and their corresponding file extensions
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/png': 'png',
-  // 'image/webp': 'webp',
 };
 
 const storage = multer.memoryStorage();
@@ -17,4 +17,9 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-module.exports = multer({ storage: storage, fileFilter: fileFilter }).single('image');
+const upload = multer({ 
+  storage: storage, 
+  fileFilter: fileFilter 
+}).single('image');
+
+module.exports = upload;

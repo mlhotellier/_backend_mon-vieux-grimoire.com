@@ -12,8 +12,14 @@ module.exports = (req, res, next) => {
         req.auth = {
             userId: userId
         }
-    next();
+        next();
     } catch(error) {
-        res.status(401).json({ error });
+        if (error instanceof jwt.TokenExpiredError) {
+            res.status(401).json({ error: 'JWT token has expired. Please log in again.' });
+        } else if (error instanceof jwt.JsonWebTokenError) {
+            res.status(401).json({ error: 'Error verifying JWT token. Please log in again.' });
+        } else {
+            res.status(401).json({ error: 'Authentication error. Please log in again.' });
+        }
     }
-}
+};
