@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const calculateAverageRating = require("../functions/calculateAverageRating");
 
 const bookSchema = mongoose.Schema({
     userId : { type: String, required: true },
@@ -12,10 +11,8 @@ const bookSchema = mongoose.Schema({
         userId: { type: String, required: true },
         grade: { type: Number, required: true, min: 0, max: 5 }
     }],
-    averageRating: { type: Number, required: true,  min: 0, max: 5 }
+    averageRating: { type: Number, default: 0, required: true,  min: 0, max: 5 }
 });
-
-bookSchema.pre('save', calculateAverageRating);
 
 const Book = mongoose.model('Book', bookSchema);
 

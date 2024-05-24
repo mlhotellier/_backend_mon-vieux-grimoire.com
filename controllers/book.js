@@ -2,12 +2,22 @@ const Book = require('../models/Book');
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
-const { cleanFileName, addRating } = require('../functions/utils');
+const { cleanFileName, calculateAverageRating } = require('../functions/utils');
 
 exports.getAllBook = (req, res, next) => {
     Book.find()
         .then(books => res.status(200).json(books))
         .catch(error => res.status(400).json({error}))
+};
+
+exports.getBestBooks = async (req, res, next) => {
+    console.log("********getBestBooks********")
+    try {
+        const bestBooks = await Book.find().sort({ averageRating: -1 }).limit(3);
+        res.status(200).json(bestBooks);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 exports.getOneBook = (req,res,next) => {
@@ -104,25 +114,28 @@ exports.deleteBook = (req,res,next) => {
 };
 
 exports.createRatingBook = async (req,res,next) => {
+    const userId = req.body.userId;
+    const rating = req.body.rating;
     try {
         const book = await Book.findOne({ _id: req.params.id });
         if (!book) {
             return res.status(404).json({ message: "Livre non trouvé." });
         }
-        await addRating(req.params.id, book.userId, req.body.rating, req.auth.userId);
-        const updatedBook = await Book.findOne({ _id: req.params.id });
-        res.status(200).json( updatedBook );
+        const existingRating = book.ratings.find(r => r.userId === userId);
+        if (existingRating) {
+            return res.status(400).json({ message: "L'utilisateur a déjà noté ce livre." });
+        }
+        const newRating = { userId: userId, grade: rating };
+        const updatedBook = await Book.findOneAndUpdate(
+            { _id: req.params.id },
+            { $push: { ratings: newRating } },
+            { new: true }
+        );
+        const newAverageRating = calculateAverageRating(updatedBook.ratings);
+        updatedBook.averageRating = newAverageRating;
+        await updatedBook.save();
+        res.status(200).json(updatedBook);
     } catch (error) {
         res.status(400).json({ error: error.message });
-    }
-};
-
-exports.getBestBooks = async (req, res, next) => {
-    console.log("********")
-    try {
-        const bestBooks = await Book.find().sort({ averageRating: -1 }).limit(3);
-        res.status(200).json(bestBooks);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
     }
 };
