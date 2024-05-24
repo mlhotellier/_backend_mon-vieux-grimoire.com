@@ -4,6 +4,14 @@ const User = require('../models/User');
 const { secretKey } = require('../config');
 
 exports.signup = (req, res, next) => {
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(req.body.email);
+    
+    if (!isValidEmail) {
+        return res.status(400).json({ message: 'Invalid email address.' });
+    }
+
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
