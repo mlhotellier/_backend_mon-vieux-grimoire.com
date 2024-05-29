@@ -2,3 +2,5 @@
 .DS_Store
 /node_modules
 /images/*
+/functions/resetDatabase.js
+db.dev.js
